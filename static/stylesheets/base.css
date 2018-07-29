@@ -1,0 +1,876 @@
+/* Elements */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12pt;
+    color: rgba(255, 255, 255, 0.8);
+    background-color: #0c2949;
+}
+
+h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16pt;
+    font-weight: bold;
+    color: #0093B1;
+    padding: 0;
+    margin: 25px 4% 0;
+}
+
+h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14pt;
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.4px;
+    font-weight: bolder;
+    color: white;
+    padding: 0;
+    margin-top: 0;
+}
+
+h3 {
+    font-size: 11pt;
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.4px;
+    color: white;
+    padding: 0;
+}
+
+h4 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 14pt;
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.4px;
+    color: rgba(37, 37, 37, 0.63);
+    padding: 0;
+    margin-top: 0;
+}
+
+p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12pt;
+    font-weight: 200;
+    width: 92%;
+}
+a {
+    color: #337ab7;
+    text-decoration: none
+}
+/* --- Utility Classes --- */
+
+.turquoise {
+    background: rgba(0, 169, 194, 0.7);
+}
+
+.blue {
+    background: rgba(0, 99, 176, 0.7);
+}
+
+.lightTurquoise {
+    background: rgba(97, 192, 212, 0.7);
+}
+
+.darkBlue {
+    background: rgba(15, 59, 127, 0.7);
+}
+
+.lightBlue {
+    background: rgba(64, 161, 218, 0.7);
+}
+
+.yellow {
+    background: #FFE641;
+}
+
+.grey-text {
+    color: rgba(37, 37, 37, 0.63);
+}
+
+#container {
+    margin-left: 0;
+    width: 100%;
+    position: absolute;
+}
+
+.center-col {
+    margin: 10px auto;
+}
+
+.col-1 {
+    width: 96%;
+}
+
+.col-2 {
+    width: 49.5%;
+}
+
+.col-3 {
+    width: 33%;
+}
+
+.col-2-bigL {
+    width: 59.5%;
+    padding-left: 25px;
+}
+
+.col-2-smallR {
+    width: 39.5%;
+    padding-right: 25px;
+}
+
+.flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.visibilityVisible {
+    visibility: visible !important;
+    transition: visibility 0.4s;
+}
+
+.visibilityHidden {
+    visibility: hidden !important;
+    transition: visibility 0.4s;
+}
+
+.noUnderline {
+    text-decoration: none !important;
+}
+
+/* --- Background --- */
+
+#bgCanvas {
+    z-index: -9999;
+    position: absolute;
+    top: 120px;
+    float: left;
+}
+
+/* --- Header and Header Content --- */
+
+.header {
+    top: 0;
+    height: 120px;
+    box-shadow: 0 -4px 16px 0 #000000;
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0.95;
+}
+
+.header button {
+    font-size: 16px;
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 5px 0 #727272;
+
+    padding: 5px 10px;
+    width: 90px;
+    margin: 2px 0 2px 10px;
+    border-radius: 5px;
+
+    text-decoration: none;
+    color: rgba(0, 169, 194, 0.7);
+    font-weight: bold;
+    letter-spacing: 0.6px;
+
+    transition: all 0.2s;
+
+    border-width: 0;
+    line-height: inherit;
+}
+
+.header button:hover {
+    background-color: #FFE641;
+    box-shadow: -3px 3px 40px rgba(32, 32, 32, 0.15);
+    color: rgba(37, 37, 37, 0.63);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.header p {
+    margin: 0;
+    padding: 0;
+}
+
+.header-condensed {
+    height: 60px !important;
+    transition: height 0.4s;
+}
+
+#eventInfo {
+    padding-left: 50px;
+    text-align: left;
+    width: 300px;
+}
+
+.header-condensed #eventInfo {
+    padding-left: 25px;
+    transition: padding-left 0.4s;
+}
+
+#eventInfo * {
+    margin: 0;
+    padding: 0;
+}
+
+#logo {
+    height: 100%;
+    width: 120px;
+    text-align: center;
+}
+
+#logoM {
+    height: 90px;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+#logoText {
+    height: 30px;
+    display: block;
+    margin: 0 auto;
+}
+
+#logo a {
+    background-color: rgba(0,0,0,0);
+    box-shadow: 0 0 0 0 #000000;
+
+    padding: 0 0;
+    margin: 0 0 0 0;
+}
+
+#headerButtons {
+    padding-right: 50px;
+    text-align: center;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.header-condensed #headerButtons, .header-condensed #headerDropdown {
+    padding-right: 25px;
+    transition: padding-right 0.4s;
+}
+
+#headerDropdown {
+    display: none;
+    position: relative;
+    width: 300px;
+    padding-right: 50px;
+    text-align: right;
+}
+
+#dropdownContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    text-align: center;
+
+    height: 120px;
+    width: 160px;
+    top: 120px;
+    right: 0;
+
+    border-left: 1px solid rgba(20, 20, 20, 0.1);
+    border-right: 1px solid rgba(20, 20, 20, 0.1);
+    border-bottom: 1px solid rgba(20, 20, 20, 0.1);
+}
+
+#dropdownContent a {
+    margin: 2px 0;
+}
+
+.header-condensed #dropdownContent {
+    top: 60px !important;
+    transition: top 0.4s;
+}
+
+#dropdownTrigger {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#dropdownTrigger:hover{
+    cursor: pointer;
+    color: #FFE641;
+}
+
+/* --- Non-Tiled Section --- */
+
+.more-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #e6f3f7;
+    color: rgba(37, 37, 37, 0.63);
+    padding: 40px 5% 70px;
+}
+
+.faq-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.faq-item {
+    width: 30%;
+    margin: 10px 3% 10px 0;
+    transition: all 0.2s;
+}
+
+.faq-item .question {
+    font-family: 'Ubuntu';
+    color: rgba(0, 169, 194, 1);
+    font-size: 14pt;
+}
+
+.faq-item .question:hover {
+    cursor: pointer;
+    color: rgba(15, 59, 127, 1);
+}
+
+.faq-item .question:before {
+    font-family: FontAwesome;
+    content: "\f055";
+    font-size: 12pt;
+    padding-right: 5px;
+}
+
+.faq-item .question.open:before {
+    content: "\f056";
+}
+
+.faq-item .answer {
+    display: none;
+    font-family: 'Ubuntu';
+    color: rgba(37, 37, 37, 0.63);
+    font-size: 12pt;
+    padding-left: calc(14pt + 5px);
+}
+
+.big-tile {
+    background-color: white;
+    box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.35);
+    padding: 30px;
+    margin-bottom: 10px;
+
+    align-self: stretch;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+}
+
+.quote {
+    font-size: 14pt;
+    margin: 0;
+    padding: 0;
+}
+
+.quote:before, .quote:after {
+    color: rgba(0, 169, 194, 0.9);
+    content: '"';
+    font-size: 14pt;
+}
+
+.source {
+    color: #40A1DA;
+    font-size: 14pt;
+    font-style: italic;
+    text-align: right;
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+
+.sponsors-image {
+    max-width: 100%;
+    max-height: 300px;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 40px;
+    text-align: center;
+}
+
+.logo-container .logo-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.logo-row div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.logo-row.small div {
+    width: 20%;
+    min-width: 140px;
+    height: 80px;
+}
+.logo-row.small a {
+    max-width: 130px;
+}
+.logo-row.small img {
+    max-height: 80px;
+    max-width: 130px;
+}
+
+.logo-row.medium div {
+    width: 33%;
+    min-width: 230px;
+    height: 150px;
+}
+.logo-row.medium a {
+    max-width: 220px;
+}
+.logo-row.medium img {
+    max-height: 150px;
+    max-width: 220px;
+}
+
+.logo-row.large div {
+    width: 50%;
+    min-width: 360px;
+    height: 225px;
+}
+.logo-row.large a {
+    max-width: 350px;
+}
+.logo-row.large img {
+    max-height: 225px;
+    max-width: 350px;
+}
+
+.logo-row.premium div {
+    width: 100%;
+    min-width: 700px;
+    height: 300px;
+}
+.logo-row.premium a {
+    max-width: 700px;
+}
+.logo-row.premium img {
+    max-height: 300px;
+    max-width: 700px;
+}
+
+.basic-info h1 {
+    /* Style as h2 */
+    font-family: 'Ubuntu';
+    font-size: 14pt;
+    text-shadow: 0px 0px 50px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.4px;
+    font-weight: bolder;
+    color: white;
+    padding: 0;
+    margin-top: 0;
+    transition: 0.2s;
+}
+
+.basic-info {
+    visibility: visible;
+    transition: all 0.2s;
+}
+
+.extra-info {
+    display: none;
+    visibility: hidden;
+    transition: all 0.2s;
+}
+
+.grid-item-expand h2 {
+    color: #0093B1;
+    padding: 15px 0 0 0;
+}
+
+.grid-item-expand .grid-item-content {
+    width: 480px;
+    height: 360px;
+    background: #e6f3f7;
+    color: rgba(37, 37, 37, 0.63);
+    box-shadow: -3px 3px 40px rgba(32, 32, 32, 0.15);
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: all 0.2s;
+}
+
+.grid-item-expand .basic-info h1 {
+    /* Back to h1 styling */
+    font-family: 'Ubuntu';
+    font-size: 18pt;
+    font-weight: bold;
+    color: #0093B1;
+    padding: 0;
+    margin: 18px 4%;
+    transition: all 0.2s;
+}
+
+.grid-item-expand.expand-small .grid-item-content {
+    width: 480px;
+    height: 360px;
+}
+
+.grid-item-expand.expand-medium .grid-item-content {
+    width: 640px;
+    height: 480px;
+}
+
+.grid-item-expand[data-expandable='1'] .expand-icon:before {
+    font-family: FontAwesome;
+    content: "\f056";
+    color: #0093B1;
+    position:absolute;
+    right: 0;
+    transition: all 0.2s;
+    height: 16px;
+    width: 16px;
+    margin: 10px 20px;
+}
+
+.grid-item[data-expandable='1']:hover .grid-item-content {
+    background: #FFE641;
+    box-shadow: -3px 3px 40px rgba(32, 32, 32, 0.15);
+    color: rgba(37, 37, 37, 0.63);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.grid-item-expand > .grid-item-content > .extra-info {
+    height: auto;
+    visibility: visible;
+    display: initial;
+    transition: all 0.2s;
+}
+
+.grid-item-image {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.grid-item-icon {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.clickable-icon {
+    transition: background-color 0.2s;
+}
+
+.grid-item:hover .clickable-icon {
+    background-color: #FFE641;
+    transition: background-color 0.2s;
+}
+
+.flavor-image {
+    max-width: 100%;
+    min-height: 100%;
+    background-color: white;
+}
+
+.tile-image {
+    margin: 0;
+    max-height: 70%;
+    max-width: 70%;
+    opacity: 0.6;
+}
+
+.partner-logo {
+    max-height: 80px;
+    max-width:100%;
+}
+
+/* --- FAQ Tile Content --- */
+
+.faq-container {
+    width: 92%;
+    margin: 0 auto;
+}
+
+li.question {
+    list-style-type: none;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+li.answer {
+    list-style-type: none;
+    margin-bottom: 10px;
+    margin-left: 2em;
+}
+
+.footer-bar {
+    height: 180px;
+    width: 100%;
+    background-color: #0093B1;
+    padding-bottom: 20px;
+    color: white;
+    font-family:'Ubuntu', sans-serif;
+    font-size: 10pt;
+    text-align:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#footer-flag {
+    height: 150px;
+    margin-bottom: 5px;
+}
+
+/* --- @media Queries --- */
+
+@media only screen and (max-width: 720px) {
+    #headerButtons {
+        display:none;
+    }
+
+    #headerDropdown {
+        display: block;
+    }
+
+    #eventInfo h2 {
+        font-size: 12pt;
+    }
+
+    #eventInfo p {
+        font-size: 10pt;
+    }
+
+    .flex-row {
+        flex-direction: column;
+    }
+
+    .col-2, .col-2-bigL, .col-2-smallR{
+        width: 100%;
+    }
+
+    .col-3 {
+        width: 100%;
+    }
+
+    .logo-container .logo-row {
+        flex-direction: column;
+    }
+
+    .logo-row div {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .logo-row img {
+        max-width: 100% !important;
+    }
+
+    .quotes .quote-column {
+        width: 100%;
+    }
+
+    .more-info .quotes {
+        flex-direction: column;
+    }
+
+    .faq-item {
+        width: 95%;
+        margin-right: 0;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    #eventInfo h2 {
+        font-size: 10pt;
+    }
+
+    #eventInfo p {
+        font-size: 8pt;
+    }
+}
+
+/* --- Application Stylings --- */
+
+.logo{
+    margin: 0px auto;
+    display: block;
+}
+
+.container_apply {
+    width: 50%;
+    margin-top: 50px;
+    -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    -moz-box-shadow:0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid  rgba(0,0,0,0.33);
+}
+
+.full{
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 15px;
+}
+
+
+/* Inputs  */
+
+html input[type="number"]{
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 18px;
+    padding-right: 8px;
+}
+
+html input[type="text"],
+html input[type="tel"],
+
+html input[type="number"],
+html input[type="url"],
+html input[type="email"],
+html input[type="password"],
+html input[type="school"],
+html input{
+    box-shadow: none;
+    opacity: 0.7;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+    -webkit-transition: .4s;
+    transition: .4s;
+    padding: 0px;
+    outline: none;
+}
+
+html input[type="text"]:hover,
+html input[type="tel"]:hover,
+
+html input[type="number"]:hover,
+html input[type="url"]:hover,
+html input[type="email"]:hover,
+html input[type="password"]:hover,
+html input[type="school"]:hover,
+html input:hover {
+    border-color: #1865AE; /* UPDATE COLOR */
+}
+
+html input[type="text"]:active,
+html input[type="text"]:focus,
+html input[type="tel"]:active,
+html input[type="tel"]:focus,
+html input[type="number"]:active,
+html input[type="number"]:focus,
+html input[type="url"]:active,
+html input[type="url"]:focus,
+html input[type="email"]:active,
+html input[type="email"]:focus,
+html input[type="password"]:active,
+html input[type="password"]:focus,
+html input[type="school"]:active,
+html input[type="school"]:focus,
+html input:active,
+html input:focus {
+    box-shadow:none !important;
+    border-color: #1CA5AA; /* UPDATE COLOR */
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+    opacity: 1;
+
+}
+
+html input[type="radio"],
+html input[type="checkbox"] {
+}
+
+html button {
+    color: #000000;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    border-radius: 0;
+    -webkit-transition: .4s;
+    transition: .4s;
+    font-size:  16px;
+}
+
+
+/* Rows */
+
+.row {
+    margin-top: 12px;
+}
+
+.row.two {
+    margin-top: 32px;
+}
+
+.row.three {
+    margin-top: 48px;
+}
+
+.row.four {
+    margin-top: 64px;
+}
+
+.row.five {
+    margin-top: 80px;
+}
+
+.row.none{
+    margin-top: 0;
+}
+
+.drop-down-button{
+   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+     margin-left: auto;
+    margin-right: auto;
+    border: 1px solid  rgba(0,0,0,0.33);
+    border-radius: 0;
+    background-color: #fff;
+}
+
+.full_width{
+    width: 100%;
+}
+
+html fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x:hidden;
+}
+.text-center {
+    text-align: center;
+}

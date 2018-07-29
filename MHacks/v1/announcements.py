@@ -1,16 +1,9 @@
+from django.db.models import Q
 from django.utils import timezone
-from rest_framework.fields import CharField
+
 from MHacks.models import Announcement as AnnouncementModel
-from serializers import UnixEpochDateField, GenericListCreateModel, GenericUpdateDestroyModel, MHacksModelSerializer
-
-
-class AnnouncementSerializer(MHacksModelSerializer):
-    id = CharField(read_only=True)
-    broadcast_at = UnixEpochDateField()
-
-    class Meta:
-        model = AnnouncementModel
-        fields = ('id', 'title', 'info', 'broadcast_at', 'category', 'approved')
+from MHacks.v1.serializers import AnnouncementSerializer
+from MHacks.v1.util import GenericListCreateModel, GenericUpdateDestroyModel
 
 
 class Announcements(GenericListCreateModel):
@@ -23,12 +16,19 @@ class Announcements(GenericListCreateModel):
 
     def get_queryset(self):
         date_last_updated = super(Announcements, self).get_queryset()
-        if date_last_updated:
-            query_set = AnnouncementModel.objects.all().filter(last_updated__gte=date_last_updated)
+
+        if not self.request.user or not self.request.user.has_perm('MHacks.change_announcement'):
+            query_set = AnnouncementModel.objects.all().filter(approved=True).filter(broadcast_at__lte=timezone.now())
+            if date_last_updated:
+                query_set = query_set.filter(Q(last_updated__gte=date_last_updated) | Q(broadcast_at__gte=date_last_updated))
+            else:
+                query_set = query_set.filter(deleted=False)
         else:
-            query_set = AnnouncementModel.objects.all().filter(deleted=False)
-        if not self.request.user.has_perm('mhacks.change_announcement'):
-            return query_set.filter(approved=True).filter(broadcast_at__lte=timezone.now())
+            query_set = AnnouncementModel.objects.all()
+            if date_last_updated:
+                query_set = query_set.filter(last_updated__gte=date_last_updated)
+            else:
+                query_set = query_set.filter(deleted=False)
         return query_set
 
 

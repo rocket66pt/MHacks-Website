@@ -28,9 +28,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_docs',
-    'MHacks',
+    'MHacks.apps.MhacksConfig',
     'push_notifications',
     'crispy_forms',
+    'explorer'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -83,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -117,9 +117,9 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
     ],
+    'EXCEPTION_HANDLER': 'MHacks.v1.util.mhacks_exception_handler',
     'URL_FORMAT_OVERRIDE': None
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -132,7 +132,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
@@ -143,3 +142,10 @@ STATICFILES_DIRS = [
 ]
 
 APPEND_SLASH = True
+
+MEDIA_ROOT = 'resumes/'
+
+# SQL explorer settings
+EXPLORER_PERMISSION_VIEW = lambda u: u.is_superuser
+# EXPLORER_CONNECTION_NAME =
+EXPLORER_SQL_WHITELIST = ('UPDATE')

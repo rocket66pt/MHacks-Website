@@ -15,14 +15,43 @@ from jinja2 import Environment
 from config.settings import EMAIL_HOST_USER
 from config.settings import MANDRILL_API_KEY
 
+from MHacks.globals import permissions_map
+
+
+# Updates permissions to groups
+def add_permissions(**kwargs):
+    from django.contrib.auth.models import Group, Permission
+    groups_queryset = Group.objects.all()
+    permissions_queryset = Permission.objects.all()
+
+    # Not the cleanest way but yolo. Maybe use sets? Would make permission removal easier too
+    for group_enum, group_permissions in permissions_map.iteritems():
+        print('')
+        group, created = groups_queryset.get_or_create(name=group_enum)
+        if created:
+            print('Created group {}.'.format(group_enum))
+
+        group.permissions.clear()
+        for permission in group_permissions:
+            permission_object = permissions_queryset.filter(codename=permission)
+            if not permission_object:
+                raise Exception('Invalid permission {}. '
+                                'Have all the relevant migrations been applied?'.format(permission))
+            permission_object = permission_object[0]
+
+            group.permissions.add(permission_object)
+            print('Added permission {} for group {}.'.format(permission, group_enum))
+
+        group.save()
+
 
 # Sends mail through mandrill client.
-def send_mandrill_mail(template_name, subject, email_to, email_vars=None):
+def send_mandrill_mail(template_name, subject, email_to, email_vars=None, attachments=None, images=None):
     if not email_vars:
         email_vars = dict()
 
     try:
-        MANDRILL_CLIENT = mandrill.Mandrill(MANDRILL_API_KEY)
+        mandrill_client = mandrill.Mandrill(MANDRILL_API_KEY)
         message = {
             'subject': subject,
             'from_email': 'hackathon@umich.edu',
@@ -30,28 +59,20 @@ def send_mandrill_mail(template_name, subject, email_to, email_vars=None):
             'to': [{'email': email_to}],
             'global_merge_vars': []
         }
+        if attachments:
+            message['attachments'] = attachments
+        if images:
+            message['images'] = images
         for k, v in email_vars.items():
             message['global_merge_vars'].append(
-                    {'name': k, 'content': v}
+                {'name': k, 'content': v}
             )
-        return MANDRILL_CLIENT.messages.send_template(template_name, [], message)
+        return mandrill_client.messages.send_template(template_name, [], message)
     except mandrill.Error as e:
         logger = logging.getLogger(__name__)
         logger.error('A mandrill error occurred: %s - %s' % (e.__class__, e))
+        print('A mandrill error occurred: %s - %s' % (e.__class__, e))
         raise
-
-
-def send_email(to_email, email_template_name, html_email_template_name, context):
-
-    # Email subject *must not* contain newlines
-    subject = ''.join(context['subject'].splitlines())
-    body = loader.render_to_string(email_template_name, context)
-    if html_email_template_name is not None:
-        html_email = loader.render_to_string(html_email_template_name, context)
-    else:
-        html_email = None
-    send_mail(subject=subject, message=body, from_email=EMAIL_HOST_USER, recipient_list=[to_email],
-              html_message=html_email)
 
 
 # Turns a relative URL into an absolute URL.
@@ -77,10 +98,11 @@ def send_verification_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     relative_confirmation_url = reverse(
         'mhacks-validate',
-        kwargs={'uid':uid, 'token': token}
+        kwargs={'uid': uid, 'token': token}
     )
     email_vars = {
-        'confirmation_url': _get_absolute_url(request, relative_confirmation_url)
+        'confirmation_url': _get_absolute_url(request, relative_confirmation_url),
+        'FIRST_NAME': user.first_name
     }
     send_mandrill_mail(
         'confirmation_instructions',
@@ -95,17 +117,43 @@ def send_password_reset_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     update_password_url = reverse(
         'mhacks-update_password',
-        kwargs={'uid':uid, 'token': token}
+        kwargs={'uid': uid, 'token': token}
     )
-    email_vars = {
-        'update_password_url': _get_absolute_url(request, update_password_url)
-    }
     send_mandrill_mail(
-        'password_reset_instructions',
+        'change_password',
         'Reset Your MHacks Password',
         user.email,
-        email_vars
+        email_vars={
+            'update_password_url': _get_absolute_url(request, update_password_url)
+        }
     )
+
+
+def send_registration_email(user, request=None):
+    from pass_creator import create_qr_code_image
+    from pass_creator import create_apple_pass
+    import base64
+    if request:
+        wallet_url = _get_absolute_url(request, reverse('mhacks-apple-pass'))
+    else:
+        wallet_url = "{0}://{1}{2}".format('https', 'mhacks.org', reverse('mhacks-apple-pass'))
+    send_mandrill_mail('ticket_email_simple', 'Your MHacks Ticket', user.email,
+                       email_vars={
+                           'FIRST_NAME': user.get_short_name(),
+                           'WALLET_URL': wallet_url,
+                           'QR_CODE': "cid:qrcode.png",
+                           'FULL_NAME': user.get_full_name(),
+                           'SCHOOL': user.cleaned_school_name()
+                       },
+                       attachments=[{'content': base64.b64encode(create_apple_pass(user).getvalue()),
+                                     'name': 'mhacks.pkpass',
+                                     'type': 'application/vnd.apple.pkpass'
+                                     }],
+                       images=[{'content': create_qr_code_image(user),
+                                'name': 'qrcode.png',
+                                'type': 'image/png'
+                                }]
+                       )
 
 
 def validate_signed_token(uid, token, require_token=True):
@@ -142,8 +190,8 @@ def environment(**options):
     """
     env = Environment(**options)
     env.globals.update({
-       'static': staticfiles_storage.url,
-       'url_for': reverse,
+        'static': staticfiles_storage.url,
+        'url_for': reverse,
     })
     from django.utils.text import slugify
     env.filters['slugify'] = slugify
@@ -158,5 +206,5 @@ def validate_url(data, query):
     :param query: string to search within the url
     :return:
     """
-    if query not in data:
+    if data and query not in data:
         raise forms.ValidationError('Please enter a valid {} url'.format(query))
